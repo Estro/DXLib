@@ -24,7 +24,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Huaztli\\dxlib\\": "src/"
+            "Huaztli\\DXLib\\": "src/"
         }
     }
 }
