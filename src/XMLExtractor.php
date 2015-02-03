@@ -135,7 +135,7 @@ class XMLExtractor extends AbstractExtractor
             $this->current = implode('/', $this->stack);
 
             // skip to Element
-            $this->skip = ($this->skip != $this->current) ?: null;
+            $this->skip = ($this->skip == $this->current) ? null : $this->skip;
 
         } while ($this->skip !== null);
 
