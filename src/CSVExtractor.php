@@ -23,7 +23,7 @@ class CSVExtractor extends AbstractExtractor
      *
      * @access  public
      * @param   array  $mapper Element mapper
-     * @throws  ExtractorException
+     * @throws  DXException
      * @return  CSVExtractor
      */
     public function __construct(array $mapper)
@@ -55,7 +55,7 @@ class CSVExtractor extends AbstractExtractor
                     $input->rewind();
 
                 } catch (RuntimeException $e) {
-                    throw new ExtractorException('Could not open "'.$input->getRealPath().'" for parsing.', 0 ,$e);
+                    throw new DXException('Could not open "'.$input->getRealPath().'" for parsing.', 0 ,$e);
                 }
                 break;
 
@@ -70,7 +70,7 @@ class CSVExtractor extends AbstractExtractor
                 break;
 
             default:
-                throw new ExtractorException('Invalid input type: '.gettype($input));
+                throw new DXException('Invalid input type: '.gettype($input));
         }
 
         // extract data
@@ -95,7 +95,7 @@ class CSVExtractor extends AbstractExtractor
 
                 // halt extraction on invalid index
                 if ($config['exceptions']) {
-                    throw new ExtractorException('Invalid column '.$column.' @ line '.$line.' for property "'.$key.'"');
+                    throw new DXException('Invalid column '.$column.' @ line '.$line.' for property "'.$key.'"');
                 }
             }
 
@@ -103,7 +103,7 @@ class CSVExtractor extends AbstractExtractor
                 call_user_func($this->mapper['callback'], $data);
 
             } catch (Exception $e) {
-                throw new ExtractorException('An error occurred while executing the callback function', 0, $e);
+                throw new DXException('An error occurred while executing the callback function', 0, $e);
             }
         }
 

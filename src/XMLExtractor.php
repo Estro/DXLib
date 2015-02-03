@@ -62,7 +62,7 @@ class XMLExtractor extends AbstractExtractor
      *
      * @access  public
      * @param   array  $mappers Element mappers
-     * @throws  ExtractorException
+     * @throws  DXException
      * @return  XMLExtractor
      */
     public function __construct(array $mappers)
@@ -74,7 +74,7 @@ class XMLExtractor extends AbstractExtractor
         $this->reader = new XMLReader();
 
         if (! $this->reader instanceof XMLReader) {
-            throw new ExtractorException('Unable to create XMLReader instance');
+            throw new DXException('Unable to create XMLReader instance');
         }
 
         // manually handle libXML errors
@@ -108,7 +108,7 @@ class XMLExtractor extends AbstractExtractor
         if ($error instanceof LibXMLError) {
             libxml_clear_errors();
 
-            throw new ExtractorException('XML error in "'.$this->current.'" element @ line #'.$error->line.'. Reason: '.$error->message);
+            throw new DXException('XML error in "'.$this->current.'" element @ line #'.$error->line.'. Reason: '.$error->message);
         }
     }
 
@@ -147,7 +147,7 @@ class XMLExtractor extends AbstractExtractor
      *
      * @access  private
      * @param   string  $xpath Element XPath
-     * @throws  ExtractorException
+     * @throws  DXException
      * @return  mixed
      */
     private function getData($xpath = null)
@@ -156,7 +156,7 @@ class XMLExtractor extends AbstractExtractor
            return $this->data[$xpath];
         }
 
-        throw new ExtractorException('Unknown Element: "'.$xpath.'"');
+        throw new DXException('Unknown Element: "'.$xpath.'"');
     }
 
     /**
@@ -173,18 +173,18 @@ class XMLExtractor extends AbstractExtractor
         switch (true) {
             case $input instanceof SplFileObject:
                 if (! $this->reader->open($input->getRealPath(), $config['encoding'], $config['options'])) {
-                    throw new ExtractorException('Could not open "'.$input->getRealPath().'" for parsing');
+                    throw new DXException('Could not open "'.$input->getRealPath().'" for parsing');
                 }
                 break;
 
             case is_string($input):
                 if (! $this->reader->XML($input, $config['encoding'], $config['options'])) {
-                    throw new ExtractorException('Could not set the XML input string for parsing');
+                    throw new DXException('Could not set the XML input string for parsing');
                 }
                 break;
 
             default:
-                throw new ExtractorException('Invalid input type: '.gettype($input));
+                throw new DXException('Invalid input type: '.gettype($input));
         }
 
         $doc = new DOMDocument();
@@ -208,7 +208,7 @@ class XMLExtractor extends AbstractExtractor
                     $node = $doc->importNode($dom_node, true);
 
                 } catch (DOMException $e) {
-                    throw new ExtractorException('Node import failed', 0, $e);
+                    throw new DXException('Node import failed', 0, $e);
                 }
 
                 $data = array(
@@ -229,7 +229,7 @@ class XMLExtractor extends AbstractExtractor
                         $data['properties'][$key] = $element->evaluate($xpath, $node);
 
                         if ($data['properties'][$key] === false) {
-                            throw new ExtractorException('Invalid XPath expression: "'.$xpath.'"');
+                            throw new DXException('Invalid XPath expression: "'.$xpath.'"');
                         }
                     }
                 }
@@ -249,7 +249,7 @@ class XMLExtractor extends AbstractExtractor
                     }
 
                 } catch (Exception $e) {
-                    throw new ExtractorException('An error occurred while executing the callback function: '.$e->getMessage());
+                    throw new DXException('An error occurred while executing the callback function: '.$e->getMessage());
                 }
             }
         }

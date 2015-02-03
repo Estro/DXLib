@@ -14,7 +14,7 @@ namespace Huaztli\DXLib;
 
 use RuntimeException;
 
-class ExtractorException extends RuntimeException
+class DXException extends RuntimeException
 {
     /**
      * Get the previous Exception message

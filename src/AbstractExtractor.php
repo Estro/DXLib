@@ -29,11 +29,11 @@ abstract class AbstractExtractor implements ExtractorInterface
     public function validate(array $mapper)
     {
         if (empty($mapper['properties'])) {
-            throw new ExtractorException('Mapper properties empty/not set');
+            throw new DXException('Mapper properties empty/not set');
         }
 
         if (! is_array($mapper['properties'])) {
-            throw new ExtractorException('Mapper properties must be an array');
+            throw new DXException('Mapper properties must be an array');
         }
 
         // if unavailable, set a default callback
@@ -44,7 +44,7 @@ abstract class AbstractExtractor implements ExtractorInterface
         }
 
         if (! $mapper['callback'] instanceof Closure) {
-            throw new ExtractorException('Callbacks must be instances of Closure');
+            throw new DXException('Callbacks must be instances of Closure');
         }
 
         return $mapper;

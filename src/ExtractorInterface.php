@@ -19,7 +19,7 @@ interface ExtractorInterface
      *
      * @access  public
      * @param   array  $mapper Element mapper
-     * @throws  ExtractorException
+     * @throws  DXException
      * @return  array
      */
     public function validate(array $mapper);
@@ -30,7 +30,7 @@ interface ExtractorInterface
      * @access  public
      * @param   string $input  Input data
      * @param   array  $config Configuration settings
-     * @throws  ExtractorException
+     * @throws  DXException
      * @return  bool
      */
     public function run($input, array $config = array());
