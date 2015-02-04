@@ -251,7 +251,7 @@ class XMLExtractor extends AbstractExtractor
                     }
 
                 } catch (Exception $e) {
-                    throw new DXException('An error occurred while executing the callback function: '.$e->getMessage());
+                    throw new DXException('Error during callback execution: '.trim($e->getMessage()), $e->getCode(), $e);
                 }
             }
         }

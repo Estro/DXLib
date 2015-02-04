@@ -88,7 +88,6 @@ class CSVExtractor extends AbstractExtractor
             );
 
             foreach ($this->mapper['properties'] as $key => $column) {
-
                 if (isset($element[$column])) {
                     $argument['properties'][$key] = $element[$column];
 
@@ -105,7 +104,7 @@ class CSVExtractor extends AbstractExtractor
                 call_user_func($this->mapper['callback'], $argument);
 
             } catch (Exception $e) {
-                throw new DXException('An error occurred while executing the callback function', 0, $e);
+                throw new DXException('Error during callback execution: '.trim($e->getMessage()), $e->getCode(), $e);
             }
         }
 
