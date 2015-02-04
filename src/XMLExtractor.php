@@ -173,7 +173,7 @@ class XMLExtractor extends AbstractExtractor
 
         switch (true) {
             case $input instanceof SplFileObject:
-                if (! $this->reader->open($input->getRealPath(), $config['encoding'], $config['options'])) {
+                if (! $this->reader->open($input->getPathname(), $config['encoding'], $config['options'])) {
                     throw new DXException('Could not open "'.$input->getRealPath().'" for parsing');
                 }
                 break;
