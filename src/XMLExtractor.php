@@ -163,7 +163,7 @@ class XMLExtractor extends AbstractExtractor
     /**
      * {@inheritdoc}
      */
-    public function run($input, array $config = array())
+    public function run($input, array $config = array(), $data = null)
     {
         $config = array_merge(array(
             'encoding'   => 'UTF-8',
@@ -212,9 +212,10 @@ class XMLExtractor extends AbstractExtractor
                     throw new DXException('Node import failed', 0, $e);
                 }
 
-                $data = array(
+                $argument = array(
                     'element'    => $this->current,
-                    'properties' => array()
+                    'properties' => array(),
+                    'data'       => $data
                 );
 
                 foreach($this->mapper[$this->current]['properties'] as $key => $xpath) {
@@ -223,20 +224,20 @@ class XMLExtractor extends AbstractExtractor
 
                     // get registered Element data
                     if (strpos($xpath, '#') === 0) {
-                        $data['properties'][$key] = $this->getData(substr($xpath, 1));
+                        $argument['properties'][$key] = $this->getData(substr($xpath, 1));
 
                     // get evaluated XPath data
                     } else {
-                        $data['properties'][$key] = $element->evaluate($xpath, $node);
+                        $argument['properties'][$key] = $element->evaluate($xpath, $node);
 
-                        if ($data['properties'][$key] === false) {
+                        if ($argument['properties'][$key] === false) {
                             throw new DXException('Invalid XPath expression: "'.$xpath.'"');
                         }
                     }
                 }
 
                 try {
-                    $result = call_user_func($this->mapper[$this->current]['callback'], $data);
+                    $result = call_user_func($this->mapper[$this->current]['callback'], $argument);
 
                     if ($result) {
                         // skip to Element

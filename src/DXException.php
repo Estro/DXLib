@@ -26,6 +26,6 @@ class DXException extends RuntimeException
     {
         $previous = $this->getPrevious();
 
-        return ($previous === null) ? null : $previous->getMessage();
+        return $previous ? null : $previous->getMessage();
     }
 }

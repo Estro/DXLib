@@ -34,14 +34,14 @@ class CSVExtractor extends AbstractExtractor
     /**
      * {@inheritdoc}
      */
-    public function run($input, array $config = array())
+    public function run($input, array $config = array(), $data = null)
     {
         $config = array_merge(array(
             'delimiter'  => ',',
             'enclosure'  => '"',
             'escape'     => '\\',
             'start_line' => 0,
-            'exceptions' => true, // throw exception on invalid indexes
+            'exceptions' => true, // throw exception on invalid columns
             'auto_eol'   => false // end of line auto detection
         ), $config);
 
@@ -81,26 +81,28 @@ class CSVExtractor extends AbstractExtractor
                 continue;
             }
 
-            $data = array(
-                'properties' => array()
+            $argument = array(
+                'line'       => $line,
+                'properties' => array(),
+                'data'       => $data
             );
 
             foreach ($this->mapper['properties'] as $key => $column) {
 
                 if (isset($element[$column])) {
-                    $data['properties'][$key] = $element[$column];
+                    $argument['properties'][$key] = $element[$column];
 
                     continue;
                 }
 
-                // halt extraction on invalid index
+                // halt extraction on invalid column
                 if ($config['exceptions']) {
                     throw new DXException('Invalid column '.$column.' @ line '.$line.' for property "'.$key.'"');
                 }
             }
 
             try {
-                call_user_func($this->mapper['callback'], $data);
+                call_user_func($this->mapper['callback'], $argument);
 
             } catch (Exception $e) {
                 throw new DXException('An error occurred while executing the callback function', 0, $e);

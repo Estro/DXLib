@@ -30,8 +30,9 @@ interface ExtractorInterface
      * @access  public
      * @param   string $input  Input data
      * @param   array  $config Configuration settings
+     * @param   mixed  $data   Optional data to pass with the callback argument
      * @throws  DXException
      * @return  bool
      */
-    public function run($input, array $config = array());
+    public function run($input, array $config = array(), $data = null);
 }
