@@ -97,7 +97,6 @@ class XMLExtractor extends AbstractExtractor
      * Convert libXML error to Exception
      *
      * @access  private
-     * @param
      * @throws  Exception
      * @return  void
      */
@@ -108,7 +107,9 @@ class XMLExtractor extends AbstractExtractor
         if ($error instanceof LibXMLError) {
             libxml_clear_errors();
 
-            throw new DXException('XML error in "'.$this->current.'" element @ line #'.$error->line.'. Reason: '.$error->message);
+            if ($error->level !== LIBXML_ERR_WARNING) {
+                throw new DXException(sprintf('"%s" @ line #%d %s', $this->current, $error->line, $error->message), $error->code);
+            }
         }
     }
 
@@ -237,7 +238,7 @@ class XMLExtractor extends AbstractExtractor
                 try {
                     $result = call_user_func($this->mapper[$this->current]['callback'], $data);
 
-                    if ($result !== null) {
+                    if ($result) {
                         // skip to Element
                         if (isset($this->data[$result])) {
                             $this->skip = $result;
