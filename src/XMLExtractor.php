@@ -108,7 +108,7 @@ class XMLExtractor extends AbstractExtractor
             libxml_clear_errors();
 
             if ($error->level !== LIBXML_ERR_WARNING) {
-                throw new DXException(sprintf('"%s" @ line #%d %s', $this->current, $error->line, $error->message), $error->code);
+                throw new DXException(sprintf('%s @ line #%d [%s]', trim($error->message), $error->line, $this->current), $error->code);
             }
         }
     }
